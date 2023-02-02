@@ -23,6 +23,10 @@ return [
 
             // Use torann/geoip to attempt to get a location
             'location' => true,
+            
+            // Use a custom header to attempt to get a location
+            'header_location' => true,
+            'header_field' => env('LOCATION_HTTP_HEADER', "CF-IPCountry"),
 
             // The Notification class to send
             'template' => \Rappasoft\LaravelAuthenticationLog\Notifications\NewDevice::class,
@@ -33,6 +37,10 @@ return [
 
             // Use torann/geoip to attempt to get a location
             'location' => true,
+            
+            // Use a custom header to attempt to get a location
+            'header_location' => true,
+            'header_field' => env('LOCATION_HTTP_HEADER', "CF-IPCountry"),
 
             // The Notification class to send
             'template' => \Rappasoft\LaravelAuthenticationLog\Notifications\FailedLogin::class,
