@@ -15,6 +15,10 @@ return [
         'logout' => \Illuminate\Auth\Events\Logout::class,
         'logout-other-devices' => \Illuminate\Auth\Events\OtherDeviceLogout::class,
     ],
+    'use-client-header' => false,
+    'client-header-ip' => '',
+    'client-header-city' => "CF-IPCity",
+    'client-header-country' => "CF-IPCountry",
 
     'notifications' => [
         'new-device' => [
@@ -22,28 +26,26 @@ return [
             'enabled' => env('NEW_DEVICE_NOTIFICATION', true),
 
             // Use torann/geoip to attempt to get a location
-            'location' => true,
-            
-            // Use a custom header to attempt to get a location
-            'header_location' => true,
-            'header_field' => env('LOCATION_HTTP_HEADER', "CF-IPCountry"),
+            'location' => false,
+
+            // Use header to attempt to get a location
+            'headerlocation' => true,
 
             // The Notification class to send
-            'template' => \Rappasoft\LaravelAuthenticationLog\Notifications\NewDevice::class,
+            'template' => App\Notifications\Alerts\NewDevice::class,
         ],
         'failed-login' => [
             // Send the FailedLogin notification
-            'enabled' => env('FAILED_LOGIN_NOTIFICATION', false),
+            'enabled' => env('FAILED_LOGIN_NOTIFICATION', true),
 
             // Use torann/geoip to attempt to get a location
-            'location' => true,
-            
-            // Use a custom header to attempt to get a location
-            'header_location' => true,
-            'header_field' => env('LOCATION_HTTP_HEADER', "CF-IPCountry"),
+            'location' => false,
+
+            'headerlocation' => true,
+
 
             // The Notification class to send
-            'template' => \Rappasoft\LaravelAuthenticationLog\Notifications\FailedLogin::class,
+            'template' => App\Notifications\Alerts\FailedLogin::class,
         ],
     ],
 
