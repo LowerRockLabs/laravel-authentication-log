@@ -2,6 +2,15 @@
 
 All notable changes to `Laravel Authentication Log` will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Add Lockout listener and notification
+- Add Capability to specify alternative source in config for IP Address (E.g. CF-Forwarded-IP)
+- Add Capability to specify alternative source in config for City (E.g. CF-IPCity)
+- Add Capability to specify alternative source in config for Country (E.g. CF-IPCountry)
+
+
 ### 3.0.0 - 2023-02-23
 
 - Laravel 10 Support - https://github.com/rappasoft/laravel-authentication-log/pull/70
