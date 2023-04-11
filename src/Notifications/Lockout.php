@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 use Rappasoft\LaravelAuthenticationLog\Models\AuthenticationLog;
 
-class NewDevice extends Notification implements ShouldQueue
+class Lockout extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -29,8 +29,8 @@ class NewDevice extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage())
-            ->subject(__('Your :app account logged in from a new device.', ['app' => config('app.name')]))
-            ->markdown('authentication-log::emails.newDevice', [
+            ->subject(__('A failed login to your account has locked it'))
+            ->markdown('authentication-log::emails.lockout', [
                 'account' => $notifiable,
                 'time' => $this->authenticationLog->login_at,
                 'ipAddress' => $this->authenticationLog->ip_address,
@@ -44,7 +44,7 @@ class NewDevice extends Notification implements ShouldQueue
         return (new SlackMessage())
             ->from(config('app.name'))
             ->warning()
-            ->content(__('Your :app account logged in from a new device.', ['app' => config('app.name')]))
+            ->content(__('There has been a failed login attempt to your :app account.  It has been locked', ['app' => config('app.name')]))
             ->attachment(function ($attachment) use ($notifiable) {
                 $attachment->fields([
                     __('Account') => $notifiable->email,
@@ -63,6 +63,6 @@ class NewDevice extends Notification implements ShouldQueue
     public function toNexmo($notifiable)
     {
         return (new NexmoMessage())
-            ->content(__('Your :app account logged in from a new device.', ['app' => config('app.name')]));
+            ->content(__('There has been a failed login attempt to your :app account.  It has been locked', ['app' => config('app.name')]));
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Rappasoft\LaravelAuthenticationLog\Listeners;
 
-use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Rappasoft\LaravelAuthenticationLog\Notifications\FailedLogin;
 
-class FailedLoginListener
+class LockoutListener
 {
     public Request $request;
 
@@ -17,7 +17,7 @@ class FailedLoginListener
 
     public function handle($event): void
     {
-        $listener = config('authentication-log.events.failed', Failed::class);
+        $listener = config('authentication-log.events.lockout', Lockout::class);
         if (! $event instanceof $listener) {
             return;
         }
@@ -29,7 +29,9 @@ class FailedLoginListener
              "Country" => request()->header(config('authentication-log.client-header-country'))] : ((config('authentication-log.notifications.failed-login.location')) ? optional(geoip()->getLocation($ip))->toArray() : null);
 
 
+        //config('authentication-log.notifications.new-device.location') ? optional(geoip()->getLocation($ip))->toArray() : null,
         if ($event->user) {
+            //$ip = request()->header('X-Forwarded-For');
             $log = $event->user->authentications()->create([
                 'ip_address' => $ip,
                 'user_agent' => $this->request->userAgent(),

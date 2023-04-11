@@ -24,7 +24,9 @@ class OtherDeviceLogoutListener
 
         if ($event->user) {
             $user = $event->user;
-            $ip = $this->request->ip();
+
+            $ip = (config('authentication-log.use-client-header')) ? request()->header(config('authentication-log.client-header-ip')) : request()->ip();
+
             $userAgent = $this->request->userAgent();
             $authenticationLog = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
 

@@ -24,8 +24,14 @@ class LoginListener
         }
 
         if ($event->user) {
+
+            $ip = (config('authentication-log.use-client-header')) ? request()->header(config('authentication-log.client-header-ip')) : request()->ip();
+
+            $locationString = (config('authentication-log.notifications.failed-login.headerlocation')) ?
+                ["City" => request()->header(config('authentication-log.client-header-city')),
+                 "Country" => request()->header(config('authentication-log.client-header-country'))] : ((config('authentication-log.notifications.failed-login.location')) ? optional(geoip()->getLocation($ip))->toArray() : null);
+    
             $user = $event->user;
-            $ip = $this->request->ip();
             $userAgent = $this->request->userAgent();
             $known = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
             $newUser = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
@@ -35,7 +41,7 @@ class LoginListener
                 'user_agent' => $userAgent,
                 'login_at' => now(),
                 'login_successful' => true,
-                'location' => config('authentication-log.notifications.new-device.location') ? optional(geoip()->getLocation($ip))->toArray() : null,
+                'location' => $locationString,
             ]);
 
             if (! $known && ! $newUser && config('authentication-log.notifications.new-device.enabled')) {

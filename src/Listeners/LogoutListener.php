@@ -24,7 +24,9 @@ class LogoutListener
 
         if ($event->user) {
             $user = $event->user;
-            $ip = $this->request->ip();
+        
+            $ip = (config('authentication-log.use-client-header')) ? request()->header(config('authentication-log.client-header-ip')) : request()->ip();
+
             $userAgent = $this->request->userAgent();
             $log = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->orderByDesc('login_at')->first();
 
