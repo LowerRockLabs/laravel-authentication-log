@@ -30,7 +30,7 @@ class LoginListener
             $locationString = (config('authentication-log.notifications.failed-login.headerlocation')) ?
                 ["City" => request()->header(config('authentication-log.client-header-city')),
                  "Country" => request()->header(config('authentication-log.client-header-country'))] : ((config('authentication-log.notifications.failed-login.location')) ? optional(geoip()->getLocation($ip))->toArray() : null);
-    
+
             $user = $event->user;
             $userAgent = $this->request->userAgent();
             $known = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
