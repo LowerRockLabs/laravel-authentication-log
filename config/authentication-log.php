@@ -7,6 +7,9 @@ return [
 
     // The database connection where the authentication_log table resides. Leave empty to use the default
     'db_connection' => null,
+    
+    // The model to use for Authentication Log
+    'model'=> \Rappasoft\LaravelAuthenticationLog\Models\AuthenticationLog::class,
 
     // The events the package listens for to log
     'events' => [
